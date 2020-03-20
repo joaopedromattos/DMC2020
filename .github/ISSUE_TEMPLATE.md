@@ -1,15 +1,11 @@
-* DMC2020 version:
-* Python version:
-* Operating System:
+### Descrição
 
-### Description
-
+Descreva o que você estava tentando fazer. Nos diga o que aconteceu, o que deu errado, e o que você esperava que acontecesse.
 Describe what you were trying to get done.
 Tell us what happened, what went wrong, and what you expected to happen.
 
-### What I Did
+### O que eu fiz
 
-```
-Paste the command(s) you ran and the output.
-If there was a crash, please include the traceback here.
+```python
+# Seu codigo.
 ```
