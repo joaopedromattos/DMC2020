@@ -1,6 +1,6 @@
 <div style="text-align:center">
-<img src="https://i.imgur.com/IRMQ45H.png" alt="drawing" height="200"/>
-<img src="https://i.imgur.com/SKJYt3r.png" alt="drawing" height="200"/>
+<img src="https://i.imgur.com/IRMQ45H.png" alt="drawing" height="100"/>
+<img src="https://i.imgur.com/SKJYt3r.png" alt="drawing" height="100"/>
 </div>
 
 # DMC 2020
