@@ -1,5 +1,9 @@
+<p align="center">
+<img src="https://i.imgur.com/IRMQ45H.png" alt="drawing" height="100"/>
+<img src="https://i.imgur.com/SKJYt3r.png" alt="drawing" height="100"/>
+</p>
 
-# DMC 2020 <img src="https://i.imgur.com/IRMQ45H.png" alt="drawing" height="30"/><span></span><img src="https://i.imgur.com/SKJYt3r.png" alt="drawing" height="20"/>
+# DMC 2020
 Repositório que contém todo o progresso obitdo pelo time do Data durante a competição Data Mining Cup 2020.
 
 ## Organização das pastas
