@@ -26,4 +26,4 @@ Queremos pessoas ativas dentro da competição. Tente reportar seu progresso dia
 
 ## Dúvidas
 
-Em caso de dúvidas, contatar David Cairuz (@davidcairuz), João Pedro (Dora) Mattos (@joaopedromattos) ou Tobias Veiga (@TobiasVeiga) via Telegram.
+Em caso de dúvidas, contatar **David Cairuz** (@davidcairuz), **João Pedro (Dora) Mattos** (@joaopedromattos) ou **Tobias Veiga** (@TobiasVeiga) via Telegram.
