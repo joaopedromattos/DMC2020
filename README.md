@@ -7,16 +7,21 @@
 Repositório que contém todo o progresso obitdo pelo time do Data durante a competição Data Mining Cup 2020.
 
 ## Organização das pastas
+
 ```
 .
 ├── LICENSE
 ├── main
 │   ├── datasets
+│   │   └── 1.0v
+│   │       ├── Features.pdf
+│   │       ├── infos.csv
+│   │       ├── items.csv
+│   │       ├── orders.csv
+│   │       └── Task_2020.pdf
 │   ├── models
 │   ├── pre-processing-features
 │   └── README.md
-├── Makefile
-├── MANIFEST.in
 └── README.md
 ```
 
