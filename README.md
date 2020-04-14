@@ -32,7 +32,7 @@ Repositório que contém todo o progresso obitdo pelo time do Data durante a com
 - <span style="color:#7FD3F5">**Tipos de Issue**</span>: Quando for abrir uma issue, lembre-se de que existem templates padrão que facilitam a análise da sua issue. Escolha o que melhor se adequa ao assunto ao qual sua issue se refere. **Além disso, lembre-se de, se possível, colocar vários labels na sua issue, para facilitar o gerenciamento do repositório**.
 
 ## Mantenha-se em contato!
-Queremos pessoas ativas dentro da competição. Tente reportar seu progresso diariamente no [INSERIR CANAL DE COMUNICAÇÃO OFICIAL DA COMPETIÇÃO AQUI]()
+Queremos pessoas ativas dentro da competição. Tente reportar seu progresso diariamente no [Grupo do Telegram](https://t.me/joinchat/E-VkgU2IU19WZjIbQpT8Yw).
 
 ## Dúvidas
 
