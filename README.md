@@ -9,20 +9,35 @@ Repositório que contém todo o progresso obitdo pelo time do Data durante a com
 ## Organização das pastas
 
 ```
-.
+├── bruno
+│   ├── Issue #1.ipynb
+│   └── README.md
+├── dora
+│   ├── datasets
+│   │   ├── 1.0v
+│   │   │   ├── Features.pdf
+│   │   │   ├── infos.csv
+│   │   │   ├── items.csv
+│   │   │   ├── orders.csv
+│   │   │   ├── README.md
+│   │   │   └── Task_2020.pdf
+│   │   └── 1.0v.zip
+│   ├── models
+│   ├── pre-processing-features
+│   │   ├── feature_lab.ipynb
+│   │   ├── Issue #2.ipynb
+│   │   └── README.md
+│   └── README.md
+├── getting_started_kernel.ipynb
 ├── LICENSE
 ├── main
 │   ├── datasets
-│   │   └── 1.0v
-│   │       ├── Features.pdf
-│   │       ├── infos.csv
-│   │       ├── items.csv
-│   │       ├── orders.csv
-│   │       └── Task_2020.pdf
+│   │   └── 1.0v.zip
 │   ├── models
 │   ├── pre-processing-features
 │   └── README.md
-└── README.md
+├── README.md
+└── submission.csv
 ```
 
 - <span style="color:#7FD3F5">**Reproducibilidade e controle de versões**</span>: A pasta ```main``` contém as versões **funcionais** mais atualizadas do modelo e do dataset já processado. O conteúdo dessa pasta deve sempre ser **funcional, legível e pronto para a submissão**. Ela é nossa versão principal dos modelos. Por favor, <span style="color:#F17FBD">**só modifique o conteúdo dessa pasta depois que abrir uma issue e sua modificação for aprovada pelos outros membros do time**.</span>
