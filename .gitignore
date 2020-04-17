@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+main/datasets/1.0v
 
 # C extensions
 *.so
