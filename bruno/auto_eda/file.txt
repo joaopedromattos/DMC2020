@@ -1,0 +1,9 @@
+DATA_PATH = ../
+SEP = ,
+target_col = order_sum
+train_name = full.csv
+test_name = 
+time_col = avg_time
+skip_cols = promotion, days_mean
+cat_cols = itemID, brand, manufacturer, category1, category2, category3, is_promotion
+
