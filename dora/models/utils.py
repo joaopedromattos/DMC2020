@@ -60,3 +60,43 @@ def merge_data(orders, items, infos, col="itemID"):
 def cost_func(target, prediction, simulatedPrice):
     temp = (prediction - np.maximum(prediction - target, 0) * 1.6)
     return np.sum(temp*simulatedPrice)
+
+
+def promo_detector(orders, aggregation=True, mode=True):
+    """
+    This function adds a "promotion" column at "orders.csv".
+    It verifies if an item of an order is being sold cheaper than it's prices "mode"/"mean". 
+    Case affirmative, a '1' will be added in 'promotion' column in the line of the order.
+
+    Parameters: orders -> Orders DataFrame
+                aggregation -> Flag that mantains or not the "salesPriceMode" in our returned DataFrame
+                True => Return will have the column
+                mode -> Decision method flag (Default 'True'). If "True", the function will 
+                use the 'mode' of the prices to decide if an item is being sold below it's normal price. 
+                If 'False', we'll use the "mean" of the prices.
+                
+    Returns: our orders Dataframe with 2 new columns ("salesPriceMode" and "promotion")
+    """
+      
+    def agregationMode(x): return x.value_counts().index[0] if mode else 'mean'
+    
+    # Getting an itemID / salesPriceMode Dataframe
+    # salesPriceMode column will store the 
+    # 'mean'/'mode' of our items
+    pricesAggregated = orders.groupby('itemID').agg(
+        salesPriceMode=('salesPrice', agregationMode))
+
+    pricesAggregated['promotion'] = 0
+    ordersCopy = orders.copy()
+    
+    orders_with_promotion = pd.merge(
+        ordersCopy, pricesAggregated, how='inner', left_on='itemID', right_on='itemID')
+    
+    # For every item whose salesPrice is lower than the 'mean'/'mode',
+    # we'll attribute 1 to it's position in 'promotion' column
+    orders_with_promotion.loc[orders_with_promotion['salesPrice'] <
+                                               orders_with_promotion['salesPriceMode'], 'promotion'] = 1
+    if (not(aggregation)):
+        orders_with_promotion.drop(
+            'salesPriceMode', axis=1, inplace=True)
+    return orders_with_promotion
