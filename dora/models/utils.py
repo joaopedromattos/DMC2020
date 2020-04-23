@@ -56,7 +56,6 @@ def merge_data(orders, items, infos, col="itemID"):
     df = pd.merge(df, infos, on=col, validate="m:1")
     return df
 
-
 def cost_func(target, prediction, simulatedPrice):
     temp = (prediction - np.maximum(prediction - target, 0) * 1.6)
     return np.sum(temp*simulatedPrice)
