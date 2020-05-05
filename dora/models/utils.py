@@ -116,7 +116,10 @@ def promotionAggregation(orders, items, promotionMode='mean', timeScale='group_b
                 E.g.: 'group_backwards'
     salesPriceMode : A pandas aggregation compatible data type;
                     The aggregation mode of the 'salesPrice' feature
-                
+                    
+    Return
+    -------------
+    A new pandas DataFrame grouped by time signature and aggregated by the function passed as argument.     
     """
 
     df = orders.groupby([timeScale, 'itemID'], as_index=False).agg(
