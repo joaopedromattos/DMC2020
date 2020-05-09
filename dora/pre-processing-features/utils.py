@@ -56,6 +56,7 @@ def merge_data(orders, items, infos, col="itemID"):
     df = pd.merge(df, infos, on=col, validate="m:1")
     return df
 
+
 def cost_func(target, prediction, simulatedPrice):
     temp = (prediction - np.maximum(prediction - target, 0) * 1.6)
     return np.sum(temp*simulatedPrice)
@@ -99,3 +100,32 @@ def promo_detector(orders, aggregation=True, mode=True):
         orders_with_promotion.drop(
             'salesPriceMode', axis=1, inplace=True)
     return orders_with_promotion
+
+
+def promotionAggregation(orders, items, promotionMode='mean', timeScale='group_backwards', salesPriceMode='mean'):
+    """The 'promotion' feature is, originally, given by sale. This function aggregates it into the selected
+    time scale.
+    
+    Parameters
+    -------------
+    orders : A pandas DataFrame with all the sales.
+    
+    items: A pandas DataFrame with the infos about all items
+                
+    promotionMode : A pandas aggregation compatible data type; 
+                    The aggregation mode of the 'promotion' feature
+    timeScale : A String with the name of the column containing the time signature.
+                E.g.: 'group_backwards'
+    salesPriceMode : A pandas aggregation compatible data type;
+                    The aggregation mode of the 'salesPrice' feature
+                
+    """
+
+    df = orders.groupby([timeScale, 'itemID'], as_index=False).agg(
+        {'order': 'sum', 'promotion': promotionMode, 'salesPrice': salesPriceMode})
+
+    items_copy = items.copy()
+
+    df.rename(columns={'order': 'orderSum', 'promotion': f'promotion_{promotionMode}',
+                       'salesPrice': f'salesPrice_{salesPriceMode}'}, inplace=True)
+    return pd.merge(df, items_copy, how='left', left_on=['itemID'], right_on=['itemID'])

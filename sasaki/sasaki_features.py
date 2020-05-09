@@ -53,15 +53,15 @@ def add_feature_promotion(items, orders):
     
 
 def agregating_by_week(items, orders,add_zero_salues=False, time_processed=True, promotion_added=True):
-        """ agregate orders.csv by week , itemID and salesPrice
+    """ agregate orders.csv by week , itemID and salesPrice
         if add_zero_salues is true, add rows of itemID in every week, even if the total sales is zero
         """
         
     
-    if not time_processed:
+    if ( time_processed == False):
         process_time(orders)
     
-    if not promotion_added:
+    if ( promotion_added == False):
         items, orders = add_feature_promotion(items, orders)
         
     
@@ -84,7 +84,7 @@ def agregating_by_week(items, orders,add_zero_salues=False, time_processed=True,
         weeks_database = orders['week_backward'].unique()
         new_rows = []
         
-        for idd in orders_w['itemID'].unique():
+        for idd in items['itemID'].unique():
             orders_id = orders_w[orders_w.itemID == idd]
             example = orders_id.iloc[0]
     
@@ -107,6 +107,3 @@ def agregating_by_week(items, orders,add_zero_salues=False, time_processed=True,
 
         
     return orders_w
-
-agregating_by_week(items, orders,True,False,False)
-    
