@@ -84,7 +84,7 @@ def agregating_by_week(items, orders,add_zero_salues=False, time_processed=True,
         weeks_database = orders['week_backward'].unique()
         new_rows = []
         
-        for idd in orders_w['itemID'].unique():
+        for idd in items['itemID'].unique():
             orders_id = orders_w[orders_w.itemID == idd]
             example = orders_id.iloc[0]
     
