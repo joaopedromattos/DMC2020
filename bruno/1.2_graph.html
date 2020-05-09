@@ -1,0 +1,105 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 500px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "cat1-1", "label": "-", "shape": "dot", "title": "cat1-1, size=214430"}, {"id": "cat2-1", "label": "-", "shape": "dot", "title": "cat2-1, size=82314"}, {"id": "cat2-2", "label": "-", "shape": "dot", "title": "cat2-2, size=9307"}, {"id": "cat2-3", "label": "-", "shape": "dot", "title": "cat2-3, size=17056"}, {"id": "cat2-4", "label": "-", "shape": "dot", "title": "cat2-4, size=26967"}, {"id": "cat2-5", "label": "-", "shape": "dot", "title": "cat2-5, size=51312"}, {"id": "cat2-6", "label": "-", "shape": "dot", "title": "cat2-6, size=25226"}, {"id": "cat2-7", "label": "-", "shape": "dot", "title": "cat2-7, size=2248"}, {"id": "cat1-2", "label": "-", "shape": "dot", "title": "cat1-2, size=429552"}, {"id": "cat2-8", "label": "-", "shape": "dot", "title": "cat2-8, size=231991"}, {"id": "cat2-9", "label": "-", "shape": "dot", "title": "cat2-9, size=23634"}, {"id": "cat2-10", "label": "-", "shape": "dot", "title": "cat2-10, size=103269"}, {"id": "cat2-11", "label": "-", "shape": "dot", "title": "cat2-11, size=61526"}, {"id": "cat2-13", "label": "-", "shape": "dot", "title": "cat2-13, size=960"}, {"id": "cat2-17", "label": "-", "shape": "dot", "title": "cat2-17, size=8172"}, {"id": "cat1-3", "label": "-", "shape": "dot", "title": "cat1-3, size=43628"}, {"id": "cat2-12", "label": "-", "shape": "dot", "title": "cat2-12, size=12113"}, {"id": "cat2-29", "label": "-", "shape": "dot", "title": "cat2-29, size=15686"}, {"id": "cat2-31", "label": "-", "shape": "dot", "title": "cat2-31, size=6617"}, {"id": "cat2-34", "label": "-", "shape": "dot", "title": "cat2-34, size=9212"}, {"id": "cat1-4", "label": "-", "shape": "dot", "title": "cat1-4, size=433987"}, {"id": "cat2-14", "label": "-", "shape": "dot", "title": "cat2-14, size=33028"}, {"id": "cat2-38", "label": "-", "shape": "dot", "title": "cat2-38, size=114286"}, {"id": "cat2-39", "label": "-", "shape": "dot", "title": "cat2-39, size=185075"}, {"id": "cat2-40", "label": "-", "shape": "dot", "title": "cat2-40, size=29287"}, {"id": "cat2-41", "label": "-", "shape": "dot", "title": "cat2-41, size=24209"}, {"id": "cat2-42", "label": "-", "shape": "dot", "title": "cat2-42, size=48102"}, {"id": "cat1-5", "label": "-", "shape": "dot", "title": "cat1-5, size=620744"}, {"id": "cat2-15", "label": "-", "shape": "dot", "title": "cat2-15, size=5622"}, {"id": "cat2-21", "label": "-", "shape": "dot", "title": "cat2-21, size=193197"}, {"id": "cat2-28", "label": "-", "shape": "dot", "title": "cat2-28, size=111822"}, {"id": "cat2-30", "label": "-", "shape": "dot", "title": "cat2-30, size=19266"}, {"id": "cat2-32", "label": "-", "shape": "dot", "title": "cat2-32, size=290837"}, {"id": "cat1-6", "label": "-", "shape": "dot", "title": "cat1-6, size=143766"}, {"id": "cat2-16", "label": "-", "shape": "dot", "title": "cat2-16, size=10003"}, {"id": "cat2-18", "label": "-", "shape": "dot", "title": "cat2-18, size=33628"}, {"id": "cat2-19", "label": "-", "shape": "dot", "title": "cat2-19, size=90587"}, {"id": "cat2-20", "label": "-", "shape": "dot", "title": "cat2-20, size=1830"}, {"id": "cat2-22", "label": "-", "shape": "dot", "title": "cat2-22, size=7119"}, {"id": "cat2-27", "label": "-", "shape": "dot", "title": "cat2-27, size=599"}, {"id": "cat1-7", "label": "-", "shape": "dot", "title": "cat1-7, size=199665"}, {"id": "cat2-23", "label": "-", "shape": "dot", "title": "cat2-23, size=147277"}, {"id": "cat2-24", "label": "-", "shape": "dot", "title": "cat2-24, size=50126"}, {"id": "cat2-25", "label": "-", "shape": "dot", "title": "cat2-25, size=1582"}, {"id": "cat2-26", "label": "-", "shape": "dot", "title": "cat2-26, size=265"}, {"id": "cat2-33", "label": "-", "shape": "dot", "title": "cat2-33, size=220"}, {"id": "cat2-35", "label": "-", "shape": "dot", "title": "cat2-35, size=100"}, {"id": "cat2-36", "label": "-", "shape": "dot", "title": "cat2-36, size=79"}, {"id": "cat2-37", "label": "-", "shape": "dot", "title": "cat2-37, size=16"}, {"id": "cat1-8", "label": "-", "shape": "dot", "title": "cat1-8, size=96183"}, {"id": "cat2-43", "label": "-", "shape": "dot", "title": "cat2-43, size=18171"}, {"id": "cat2-44", "label": "-", "shape": "dot", "title": "cat2-44, size=66359"}, {"id": "cat2-45", "label": "-", "shape": "dot", "title": "cat2-45, size=2403"}, {"id": "cat2-46", "label": "-", "shape": "dot", "title": "cat2-46, size=131"}, {"id": "cat2-47", "label": "-", "shape": "dot", "title": "cat2-47, size=5727"}, {"id": "cat2-48", "label": "-", "shape": "dot", "title": "cat2-48, size=1000"}, {"id": "cat2-49", "label": "-", "shape": "dot", "title": "cat2-49, size=987"}, {"id": "cat2-50", "label": "-", "shape": "dot", "title": "cat2-50, size=1120"}, {"id": "cat2-51", "label": "-", "shape": "dot", "title": "cat2-51, size=202"}, {"id": "cat2-52", "label": "-", "shape": "dot", "title": "cat2-52, size=83"}]);
+        edges = new vis.DataSet([{"from": "cat1-1", "to": "cat2-1", "value": 82314}, {"from": "cat1-1", "to": "cat2-2", "value": 9307}, {"from": "cat1-1", "to": "cat2-3", "value": 17056}, {"from": "cat1-1", "to": "cat2-4", "value": 26967}, {"from": "cat1-1", "to": "cat2-5", "value": 51312}, {"from": "cat1-1", "to": "cat2-6", "value": 25226}, {"from": "cat1-1", "to": "cat2-7", "value": 2248}, {"from": "cat1-2", "to": "cat2-8", "value": 231991}, {"from": "cat1-2", "to": "cat2-9", "value": 23634}, {"from": "cat1-2", "to": "cat2-10", "value": 103269}, {"from": "cat1-2", "to": "cat2-11", "value": 61526}, {"from": "cat1-2", "to": "cat2-13", "value": 960}, {"from": "cat1-2", "to": "cat2-17", "value": 8172}, {"from": "cat1-3", "to": "cat2-12", "value": 12113}, {"from": "cat1-3", "to": "cat2-29", "value": 15686}, {"from": "cat1-3", "to": "cat2-31", "value": 6617}, {"from": "cat1-3", "to": "cat2-34", "value": 9212}, {"from": "cat1-4", "to": "cat2-14", "value": 33028}, {"from": "cat1-4", "to": "cat2-38", "value": 114286}, {"from": "cat1-4", "to": "cat2-39", "value": 185075}, {"from": "cat1-4", "to": "cat2-40", "value": 29287}, {"from": "cat1-4", "to": "cat2-41", "value": 24209}, {"from": "cat1-4", "to": "cat2-42", "value": 48102}, {"from": "cat1-5", "to": "cat2-15", "value": 5622}, {"from": "cat1-5", "to": "cat2-21", "value": 193197}, {"from": "cat1-5", "to": "cat2-28", "value": 111822}, {"from": "cat1-5", "to": "cat2-30", "value": 19266}, {"from": "cat1-5", "to": "cat2-32", "value": 290837}, {"from": "cat1-6", "to": "cat2-16", "value": 10003}, {"from": "cat1-6", "to": "cat2-18", "value": 33628}, {"from": "cat1-6", "to": "cat2-19", "value": 90587}, {"from": "cat1-6", "to": "cat2-20", "value": 1830}, {"from": "cat1-6", "to": "cat2-22", "value": 7119}, {"from": "cat1-6", "to": "cat2-27", "value": 599}, {"from": "cat1-7", "to": "cat2-23", "value": 147277}, {"from": "cat1-7", "to": "cat2-24", "value": 50126}, {"from": "cat1-7", "to": "cat2-25", "value": 1582}, {"from": "cat1-7", "to": "cat2-26", "value": 265}, {"from": "cat1-7", "to": "cat2-33", "value": 220}, {"from": "cat1-7", "to": "cat2-35", "value": 100}, {"from": "cat1-7", "to": "cat2-36", "value": 79}, {"from": "cat1-7", "to": "cat2-37", "value": 16}, {"from": "cat1-8", "to": "cat2-43", "value": 18171}, {"from": "cat1-8", "to": "cat2-44", "value": 66359}, {"from": "cat1-8", "to": "cat2-45", "value": 2403}, {"from": "cat1-8", "to": "cat2-46", "value": 131}, {"from": "cat1-8", "to": "cat2-47", "value": 5727}, {"from": "cat1-8", "to": "cat2-48", "value": 1000}, {"from": "cat1-8", "to": "cat2-49", "value": 987}, {"from": "cat1-8", "to": "cat2-50", "value": 1120}, {"from": "cat1-8", "to": "cat2-51", "value": 202}, {"from": "cat1-8", "to": "cat2-52", "value": 83}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
