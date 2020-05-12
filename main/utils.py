@@ -19,7 +19,7 @@ def read_data(data_dir="../main/datasets/", data_file=DATA_FILE):
 
 def process_time(df, should_print=False,
                  test_start=pd.to_datetime("30 June 2018 00:00:00")):
-    """Adds a group_backwards and days_backwards column to the data
+    """Adds a group_backwards, week_backwards and days_backwards column to the data
     
     If ```Use the period starting on 30 June 2018 00:00:00, the day after the last date from the transaction files.``` 
     that means the 29th is included, but the 30th not (it's the first day in our test data;
@@ -42,7 +42,9 @@ def process_time(df, should_print=False,
     df["days"].unique() == np.arange(1, 181)
 
     df["days_backwards"] = test_start.dayofyear - df["days"]
+    df["week_backwards"] = np.ceil(df["days_backwards"] / 7).astype(int)
     df["group_backwards"] = np.ceil(df["days_backwards"] / 14).astype(int)
+        
     # Make sure we didn't make any mistake - 16th/06 should 1
     assert not (df.set_index("time").loc["16 June 2018 00:00:00":"16 June 2018 23:59:59",
                                              "group_backwards"] != 1).sum()
