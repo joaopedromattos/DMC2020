@@ -117,48 +117,25 @@ def add_feature_position_month(orders, time_processed=True, add_feature_week=Fal
         
         if add_feature_week:
         also add the 3 features above but for the week
+        
+        #path = path to the position_in_month.csvs
         """
     
     if time_processed == False:
         process_time(orders)
-            
-    #getting first and last date of every group
-    groups = orders.groupby(['group_backwards'], as_index=False).agg({'time':['min', 'max']})
-    groups.columns = ['group_backwards','first_date_g','last_date_g']
-
-    #ok, a pretty ugly way to get the midle day of the group
-    groups['median'] = groups['first_date_g'] + pd.DateOffset(days=7)
-
     
-    # position in the month of the first day of the group
-    groups['posM_f_group'] = groups['first_date_g'].map( lambda x : x.day)
-
-    groups['posM_m_group'] = groups['median'].map( lambda x : x.day)
+    positions = pd.read_csv('position_in_month.csv')  
     
-    groups['posM_l_group'] = groups['last_date_g'].map( lambda x : x.day)
-
-    #left join with orders
-    groups = groups[['group_backwards','posM_f_group','posM_m_group','posM_l_group']]
-    orders = pd.merge(orders, groups, on='group_backwards', how='left')
+    join_on = ['group_backwards','week_backwards']
     
-    
-    #do the same thing but for the week
-    if add_feature_week:
-        #getting first and last date of every week
-        weeks = orders.groupby(['week_backwards'], as_index=False).agg({'time':['min', 'max']})
-        weeks.columns = ['week_backwards','first_date_w','last_date_w']
-        weeks['median'] = weeks['first_date_w'] + pd.DateOffset(days=3)
-
-        #position in the month of the first day of the week
-        weeks['posM_f_week'] = weeks['first_date_w'].map( lambda x : x.day)
-
-        weeks['posM_m_week'] = weeks['median'].map( lambda x : x.day)
-
-        weeks['posM_l_week'] = weeks['last_date_w'].map( lambda x : x.day)
-
-
-        #left join with orders
-        weeks = weeks[['week_backwards','posM_f_week','posM_m_week','posM_l_week']]
-        orders = pd.merge(orders, weeks,on='week_backwards',how='left')
+    if not add_feature_week:
+        positions = positions.groupby('group_backwards').first()
+        positions = positions.drop(columns=['posM_f_week','posM_m_week','posM_l_week'])
         
-    return orders
+        join_on = join_on[:-1]
+        
+    comb = pd.merge(orders, positions, on=join_on, how='left')
+    
+
+        
+    return comb
