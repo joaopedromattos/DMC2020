@@ -11,56 +11,19 @@ Repositório que contém todo o progresso obitdo pelo time do Data durante a com
 
 ```
 .
+├── autotest.csv
+├── baseline.csv
 ├── bruno
-│   ├── 1.0-First look.ipynb
-│   ├── 1.1-First Model.ipynb
-│   ├── auto_eda
-│   │   ├── file.txt
-│   │   └── time_eda.ipynb
-│   ├── Ideas.ipynb
-│   ├── Issue #1.ipynb
-│   └── README.md
 ├── david
-│   ├── baseline_model.ipynb
-│   └── notas.md
 ├── dora
-│   ├── datasets
-│   │   └── 1.0v.zip
-│   ├── models
-│   │   ├── __pycache__
-│   │   │   └── utils.cpython-38.pyc
-│   │   ├── Simple XGBoost.ipynb
-│   │   ├── utils.py
-│   │   └── XGBoost Enhanced Features.ipynb
-│   ├── pre-processing-features
-│   │   ├── feature_lab.ipynb
-│   │   ├── Issue #5.ipynb
-│   │   ├── promoDates.ipynb
-│   │   ├── promotionFeature.ipynb
-│   │   ├── __pycache__
-│   │   │   └── utils.cpython-38.pyc
-│   │   ├── README.md
-│   │   └── utils.py
-│   └── README.md
 ├── getting_started_kernel.ipynb
+├── kaggle.py
 ├── LICENSE
 ├── main
-│   ├── datasets
-│   │   └── 1.0v.zip
-│   ├── __pycache__
-│   │   └── utils.cpython-38.pyc
-│   ├── README.md
-│   └── utils.py
 ├── README.md
 ├── sasaki
-│   ├── 1-featureModa.ipynb
-│   ├── 2-qualquerCoisa.ipynb
-│   ├── 3-agregating by week.ipynb
-│   ├── sasaki_features.py
-│   └── utils.py
 ├── submission.csv
 └── tobias
-    └── quick_olhada.ipynb
 ```
 
 -   <span style="color:#7FD3F5">**Reproducibilidade e controle de versões**</span>: A pasta `main` contém as versões **funcionais** mais atualizadas do modelo e do dataset já processado. O conteúdo dessa pasta deve sempre ser **funcional, legível e pronto para a submissão**. Ela é nossa versão principal dos modelos. Por favor, <span style="color:#F17FBD">**só modifique o conteúdo dessa pasta depois que abrir uma issue e sua modificação for aprovada pelos outros membros do time**.</span>
