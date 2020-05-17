@@ -43,7 +43,7 @@ def main(path, divide):
     fee = fee.astype(float)
     fee *= 0.6*answers["simulationPrice"]
 
-    total = (revenue + fee).sum()
+    total = (revenue - fee).sum()
     if divide:
         total /= 1e6
 
@@ -65,9 +65,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate DMC score/1e6. --'
                                      + example)
     parser.add_argument('path', type=str, help='Path to CSV file from this dir')
-    parser.add_argument('--divide', default=True,
-                        help='Weather or not to divide by 1e6 (default: True)')
+    # Bool type doesn't work well with argparser.
+    # view https://stackoverflow.com/questions/15008758/parsing-boolean-values-with-argparse
+    # parser.add_argument('--divide', default=True, action='store_fale',
+    #                   help='Divides by 1e6. Use --divide="" to deactivate')
 
     args = parser.parse_args()
     print(args)
-    main(args.path, args.divide)
+    main(args.path, True)
