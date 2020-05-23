@@ -20,8 +20,8 @@ def read_data(data_dir="../main/datasets/", data_file=DATA_FILE):
 def process_time(df, should_print=False,
                  test_start=pd.to_datetime("30 June 2018 00:00:00")):
     """Adds a group_backwards, week_backwards and days_backwards column to the data
-    
-    If ```Use the period starting on 30 June 2018 00:00:00, the day after the last date from the transaction files.``` 
+
+    If ```Use the period starting on 30 June 2018 00:00:00, the day after the last date from the transaction files.```
     that means the 29th is included, but the 30th not (it's the first day in our test data;
 
     Also, the first 14 days backwards should be [16-29] June (The 15th should not be included!)
@@ -44,7 +44,7 @@ def process_time(df, should_print=False,
     df["days_backwards"] = test_start.dayofyear - df["days"]
     df["week_backwards"] = np.ceil(df["days_backwards"] / 7).astype(int)
     df["group_backwards"] = np.ceil(df["days_backwards"] / 14).astype(int)
-        
+
     # Make sure we didn't make any mistake - 16th/06 should 1
     assert not (df.set_index("time").loc["16 June 2018 00:00:00":"16 June 2018 23:59:59",
                                              "group_backwards"] != 1).sum()
@@ -67,33 +67,33 @@ def cost_func(target, prediction, simulatedPrice):
 def promo_detector(orders, aggregation=True, mode=True):
     """
     This function adds a "promotion" column at "orders.csv".
-    It verifies if an item of an order is being sold cheaper than it's prices "mode"/"mean". 
+    It verifies if an item of an order is being sold cheaper than it's prices "mode"/"mean".
     Case affirmative, a '1' will be added in 'promotion' column in the line of the order.
 
     Parameters: orders -> Orders DataFrame
                 aggregation -> Flag that mantains or not the "salesPriceMode" in our returned DataFrame
                 True => Return will have the column
-                mode -> Decision method flag (Default 'True'). If "True", the function will 
-                use the 'mode' of the prices to decide if an item is being sold below it's normal price. 
+                mode -> Decision method flag (Default 'True'). If "True", the function will
+                use the 'mode' of the prices to decide if an item is being sold below it's normal price.
                 If 'False', we'll use the "mean" of the prices.
-                
+
     Returns: our orders Dataframe with 2 new columns ("salesPriceMode" and "promotion")
     """
-      
+
     def agregationMode(x): return x.value_counts().index[0] if mode else 'mean'
-    
+
     # Getting an itemID / salesPriceMode Dataframe
-    # salesPriceMode column will store the 
+    # salesPriceMode column will store the
     # 'mean'/'mode' of our items
     pricesAggregated = orders.groupby('itemID').agg(
         salesPriceMode=('salesPrice', agregationMode))
 
     pricesAggregated['promotion'] = 0
     ordersCopy = orders.copy()
-    
+
     orders_with_promotion = pd.merge(
         ordersCopy, pricesAggregated, how='inner', left_on='itemID', right_on='itemID')
-    
+
     # For every item whose salesPrice is lower than the 'mean'/'mode',
     # we'll attribute 1 to it's position in 'promotion' column
     orders_with_promotion.loc[orders_with_promotion['salesPrice'] <
@@ -107,20 +107,20 @@ def promo_detector(orders, aggregation=True, mode=True):
 def promotionAggregation(orders, items, promotionMode='mean', timeScale='group_backwards', salesPriceMode='mean'):
     """The 'promotion' feature is, originally, given by sale. This function aggregates it into the selected
     time scale.
-    
+
     Parameters
     -------------
     orders : A pandas DataFrame with all the sales.
-    
+
     items: A pandas DataFrame with the infos about all items
-                
-    promotionMode : A pandas aggregation compatible data type; 
+
+    promotionMode : A pandas aggregation compatible data type;
                     The aggregation mode of the 'promotion' feature
     timeScale : A String with the name of the column containing the time signature.
                 E.g.: 'group_backwards'
     salesPriceMode : A pandas aggregation compatible data type;
                     The aggregation mode of the 'salesPrice' feature
-                
+
     """
 
     df = orders.groupby([timeScale, 'itemID'], as_index=False).agg(

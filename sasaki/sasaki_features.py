@@ -109,7 +109,7 @@ def agregating_by_week(items, orders,add_zero_salues=False, time_processed=True,
     return orders_w
 
 
-def add_feature_position_month(orders, time_processed=True, add_feature_week=False):
+def add_feature_position_month(orders, time_processed=True, timeScale='group_backwards'):
     """ add to orders.csv:
         posM_f_group: position in the month of the first day of the group
         posM_m_group: position of the midle day of the group
@@ -126,15 +126,14 @@ def add_feature_position_month(orders, time_processed=True, add_feature_week=Fal
     
     positions = pd.read_csv('position_in_month.csv')  
     
-    join_on = ['group_backwards','week_backwards']
     
-    if not add_feature_week:
+    if timeScale=='group_backwards':
         positions = positions.groupby('group_backwards').first()
         positions = positions.drop(columns=['posM_f_week','posM_m_week','posM_l_week'])
-        
-        join_on = join_on[:-1]
-        
-    comb = pd.merge(orders, positions, on=join_on, how='left')
+    if timeScale=='week_backwards':
+        positions = positions.drop(columns=['posM_f_group','posM_m_group','posM_l_group'])
+     
+    comb = pd.merge(orders, positions, on=timeScale, how='left')
     
 
         
