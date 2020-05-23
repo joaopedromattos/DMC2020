@@ -43,6 +43,10 @@ def main(path, divide):
     fee = fee.astype(float)
     fee *= 0.6*answers["simulationPrice"]
 
+    print(revenue, fee)
+    print(revenue.sum())
+    print(fee.sum())
+
     total = (revenue - fee).sum()
     if divide:
         total /= 1e6
@@ -72,4 +76,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     print(args)
-    main(args.path, True)
+    main(args.path, divide=False)
