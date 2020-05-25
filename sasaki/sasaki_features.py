@@ -129,9 +129,9 @@ def add_feature_position_month(orders, time_processed=True, timeScale='group_bac
     
     if timeScale=='group_backwards':
         positions = positions.groupby('group_backwards').first()
-        positions = positions.drop(columns=['posM_f_week','posM_m_week','posM_l_week'])
+        positions = positions.drop(columns=['posM_f_week','posM_m_week','posM_l_week','week_backwards'])
     if timeScale=='week_backwards':
-        positions = positions.drop(columns=['posM_f_group','posM_m_group','posM_l_group'])
+        positions = positions.drop(columns=['posM_f_group','posM_m_group','posM_l_group','group_backwards'])
      
     comb = pd.merge(orders, positions, on=timeScale, how='left')
     
