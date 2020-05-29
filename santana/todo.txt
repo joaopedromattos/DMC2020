@@ -1,0 +1,2 @@
+Histograma dos preços vs quantidade vendida
+Ver se ocorre um aumento nas vendas nos finais de semana
