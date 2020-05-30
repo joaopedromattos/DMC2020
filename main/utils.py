@@ -84,14 +84,14 @@ def promo_detector(orders, aggregation=True, mode=True):
       
     def agregationMode(x): return x.value_counts().index[0] if mode else 'mean'
     
-    for i in range(1, 14):
+    for i in range(13, 0, -1):
         # Getting an itemID / salesPriceMode Dataframe
         # salesPriceMode column will store the 
         # 'mean'/'mode' of our items
-        current_agg = orders.loc[orders.group_backwards <= i].groupby(['itemID']).agg(salesPriceMode=('salesPrice', agregationMode))
+        current_agg = orders.loc[orders.group_backwards > i].groupby(['itemID']).agg(salesPriceMode=('salesPrice', agregationMode))
         
         current_agg['promotion'] = 0
-        orders_copy = orders.loc[orders.group_backwards == i].copy()
+        orders_copy = orders.loc[orders.group_backwards == i - 1].copy()
         
         current_orders_with_promotion = pd.merge(orders_copy, current_agg, how='inner', left_on='itemID', right_on='itemID')
         
@@ -101,6 +101,13 @@ def promo_detector(orders, aggregation=True, mode=True):
                                                        current_orders_with_promotion['salesPriceMode'], 'promotion'] = 1
         
         new_df = pd.concat([new_df, current_orders_with_promotion])
+    
+    
+    week_13 = orders.loc[orders.group_backwards == 13].copy()
+    week_13['salesPriceMode'] = 0
+    week_13['promotion'] = 0
+    
+    new_df = pd.concat([new_df, week_13])
     
     if (not(aggregation)):
         new_df.drop(
