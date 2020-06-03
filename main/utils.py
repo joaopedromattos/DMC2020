@@ -144,3 +144,34 @@ def promotionAggregation(orders, items, promotionMode='mean', timeScale='group_b
     df.rename(columns={'order': 'orderSum', 'promotion': f'promotion_{promotionMode}',
                        'salesPrice': f'salesPrice_{salesPriceMode}'}, inplace=True)
     return pd.merge(df, items_copy, how='left', left_on=['itemID'], right_on=['itemID'])
+
+def dataset_builder(orders, items):
+    """This function receives the 'orders' DataFrame created by Bruno's 'process_time' function.
+    This function aims to quickly build our dataset with few lines and simple code, based on Pandas MultiIndex Class.
+    
+    Parameters
+    -------------
+    orders : A pandas DataFrame with all the sales in the format that Bruno's
+    'process_time' function outputs.
+    items : A pandas DataFrame read from 'items.csv'
+                    
+    Return
+    -------------
+    A new pandas DataFrame grouped by 'group_backwards', with the orders summed up and merged with the 'items' DataFrame.
+    """
+    # Aggregating our data by pairs...
+    df = orders.groupby(['group_backwards', 'itemID'], as_index=False).agg({'order':'sum'}).rename(columns={'order':'orderSum'})
+    
+    # Building our dataset through multiindexing...
+    multiIndex = pd.MultiIndex.from_product([range(13, 0, -1), items['itemID']], names=['group_backwards', 'itemID'])
+    aux = pd.DataFrame(index=multiIndex)
+    df = pd.merge(aux, df, left_on=['group_backwards', 'itemID'], right_on=['group_backwards', 'itemID'], how='left')
+    df.fillna(0, inplace = True)
+
+    # Gettin' informations about our items in our dataset...
+    df = pd.merge(df, items, left_on=['itemID'], right_on=['itemID']).sort_values('group_backwards', ascending=False)
+    
+    assert (np.sum(df.group_backwards.unique() == [range(13, 0, -1)]) == 13), ("Something is wrong with the number of weeks")
+    assert (len(df) == len(items) * 13), ("There are items missing from your dataset!")
+    
+    return df
