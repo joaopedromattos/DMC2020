@@ -211,10 +211,76 @@ def dataset_builder(orders, items):
     df.fillna(0, inplace = True)
 
     # Gettin' informations about our items in our dataset...
-    df = pd.merge(df, items, left_on=['itemID'], right_on=['itemID']).sort_values('group_backwards', ascending=False)
+    df = pd.merge(df, items, left_on=['itemID'], right_on=[
+                  'itemID']).sort_values(['group_backwards', 'itemID'], ascending=[False, True])
     
     assert (np.sum(df.group_backwards.unique() == [range(13, 0, -1)]) == 13), ("Something is wrong with the number of weeks")
     assert (len(df) == len(items) * 13), ("There are items missing from your dataset!")
     
+    df.reset_index(drop=True, inplace=True)
+    
     return df
     
+def cumulative_sale_by_category(df):
+    """
+    This function add the percentage_acum_cat_3 in our dataset, which tries to describe how 
+    important a certain item is inside Its group on category 3.
+
+    Parameters: orders -> Orders DataFrame after "process_time" and "dataset_builder"
+
+    Returns: our orders Dataframe with a new column (percentage_acum_cat_3)
+    """
+    acum = pd.DataFrame()
+    for i in range(12, 0, -1):
+
+        orders_per_item = df.loc[df.group_backwards > i].groupby(
+            ['itemID', 'category3'], as_index=False).agg({'orderSum': 'sum'})
+        orders_per_cat = df.loc[df.group_backwards > i].groupby(
+            ['category3'], as_index=False).agg({'orderSum': 'sum'})
+
+        # Mergin' the amount of sales by category
+        # with the accumulated sales
+        # of an item grouped by category
+        # of the previous weeks
+        cum_sum_mean = pd.merge(orders_per_item, orders_per_cat,
+                                left_on='category3', right_on='category3', validate="m:1")
+
+        # Calculating the mean of the accumulated sales...
+        cum_sum_mean['percentage_accum_cat_3'] = cum_sum_mean['orderSum_x'] / \
+            cum_sum_mean['orderSum_y'] * 100
+
+        # These columns won't be useful anymore,
+        # since they were used just to calculate our mean
+        cum_sum_mean.drop(columns=['orderSum_x', 'orderSum_y'], inplace=True)
+
+        feature_merge = pd.merge(df.loc[df.group_backwards == i], cum_sum_mean.drop(
+            columns=['category3']), left_on='itemID', right_on='itemID')
+        acum = pd.concat([acum, feature_merge])
+
+    week_13 = df.loc[df.group_backwards == 13].copy()
+    week_13['percentage_accum_cat_3'] = 0
+    acum = pd.concat([week_13, acum])
+
+    assert (acum.loc[acum.group_backwards == 13]['percentage_accum_cat_3'].sum(
+    ) == 0), ("The values on week 13 should all be zero. Verify your inputs")
+    
+    acum.reset_index(drop=True, inplace=True)
+
+    return acum
+
+def time_encoder(data, col, max_val):
+    """This function aims to encode a time series in function sines and cosines.
+    
+    Parameters
+    -------------
+    data : A pandas DataFrame with all the dataset
+    col : A string corresponding to the name of the column that will be encoded
+    max_val : Size of the time-window of encoding
+                    
+    Return
+    -------------
+    A new pandas DataFrame with two new columns, one encoded as sin and other as cosine.
+    """
+    data[col + '_sin'] = np.sin(2 * np.pi * data[col]/max_val)
+    data[col + '_cos'] = np.cos(2 * np.pi * data[col]/max_val)
+    return data
