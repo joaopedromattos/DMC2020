@@ -169,9 +169,12 @@ def dataset_builder(orders, items):
     df.fillna(0, inplace = True)
 
     # Gettin' informations about our items in our dataset...
-    df = pd.merge(df, items, left_on=['itemID'], right_on=['itemID']).sort_values('group_backwards', ascending=False)
+    df = pd.merge(df, items, left_on=['itemID'], right_on=[
+                  'itemID']).sort_values(['group_backwards', 'itemID'], ascending=[False, True])
     
     assert (np.sum(df.group_backwards.unique() == [range(13, 0, -1)]) == 13), ("Something is wrong with the number of weeks")
     assert (len(df) == len(items) * 13), ("There are items missing from your dataset!")
+    
+    df.reset_index(drop=True, inplace=True)
     
     return df
