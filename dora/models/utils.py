@@ -221,10 +221,11 @@ def dataset_builder(orders, items):
     
     return df
     
-def cumulative_sale_by_category(df):
+def cumulative_sale_by_category(df, category='category3'):
     """
-    This function add the percentage_acum_cat_3 in our dataset, which tries to describe how 
-    important a certain item is inside Its group on category 3.
+    This function add the "percentage_acum" features in our dataset, 
+    which try to describe how important a certain item is inside 
+    Its group on each category (being either 1, 2 or 3).
 
     Parameters: orders -> Orders DataFrame after "process_time" and "dataset_builder"
 
@@ -234,19 +235,19 @@ def cumulative_sale_by_category(df):
     for i in range(12, 0, -1):
 
         orders_per_item = df.loc[df.group_backwards > i].groupby(
-            ['itemID', 'category3'], as_index=False).agg({'orderSum': 'sum'})
+            ['itemID', category], as_index=False).agg({'orderSum': 'sum'})
         orders_per_cat = df.loc[df.group_backwards > i].groupby(
-            ['category3'], as_index=False).agg({'orderSum': 'sum'})
+            [category], as_index=False).agg({'orderSum': 'sum'})
 
         # Mergin' the amount of sales by category
         # with the accumulated sales
         # of an item grouped by category
         # of the previous weeks
         cum_sum_mean = pd.merge(orders_per_item, orders_per_cat,
-                                left_on='category3', right_on='category3', validate="m:1")
+                                left_on=category, right_on=category, validate="m:1")
 
         # Calculating the mean of the accumulated sales...
-        cum_sum_mean['percentage_accum_cat_3'] = cum_sum_mean['orderSum_x'] / \
+        cum_sum_mean[f'percentage_accum_{category}'] = cum_sum_mean['orderSum_x'] / \
             cum_sum_mean['orderSum_y'] * 100
 
         # These columns won't be useful anymore,
@@ -254,14 +255,14 @@ def cumulative_sale_by_category(df):
         cum_sum_mean.drop(columns=['orderSum_x', 'orderSum_y'], inplace=True)
 
         feature_merge = pd.merge(df.loc[df.group_backwards == i], cum_sum_mean.drop(
-            columns=['category3']), left_on='itemID', right_on='itemID')
+            columns=[category]), left_on='itemID', right_on='itemID')
         acum = pd.concat([acum, feature_merge])
 
     week_13 = df.loc[df.group_backwards == 13].copy()
-    week_13['percentage_accum_cat_3'] = 0
+    week_13[f'percentage_accum_{category}'] = 0
     acum = pd.concat([week_13, acum])
 
-    assert (acum.loc[acum.group_backwards == 13]['percentage_accum_cat_3'].sum(
+    assert (acum.loc[acum.group_backwards == 13][f'percentage_accum_{category}'].sum(
     ) == 0), ("The values on week 13 should all be zero. Verify your inputs")
     
     acum.reset_index(drop=True, inplace=True)
