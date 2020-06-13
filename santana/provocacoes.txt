@@ -1,0 +1,5 @@
+Como o customer rating influencia na compra dos produtos?
+Como a brand e o manufacturer estão relacionados?
+Podemos achar alguma relação entre as categorias de produtos e os manufacturers/brands?
+Como o sales price se modifica dentro de cada um dos grupos de tempo (dias, semanas e grupos...)
+

@@ -1,0 +1,1 @@
+Utilizar o customer rating como uma especie de denominador para diminuir/aumentar as chances de um produto ser vendido baseado na sua avaliação (5.0 => o produto tem mais chances de ser vendido; 1.0 => o produto tem bem menos chances de ser vendido).
