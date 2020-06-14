@@ -1,10 +1,10 @@
 {
-"meta":{"test_sets":["test"],"test_metrics":[{"best_value":"Max","name":"feval_cat"},{"best_value":"Min","name":"MAE"}],"learn_metrics":[{"best_value":"Max","name":"feval_cat"},{"best_value":"Min","name":"MAE"}],"launch_mode":"Train","parameters":"","iteration_count":1000,"learn_sets":["learn"],"name":"experiment"},
+"meta":{"test_sets":["test","test1"],"test_metrics":[{"best_value":"Max","name":"feval_cat"},{"best_value":"Min","name":"MAE"}],"learn_metrics":[{"best_value":"Max","name":"feval_cat"},{"best_value":"Min","name":"MAE"}],"launch_mode":"Train","parameters":"","iteration_count":1000,"learn_sets":["learn"],"name":"experiment"},
 "iterations":[
-{"learn":[0,4.841836791],"iteration":0,"passed_time":0.0792473873,"remaining_time":79.16813992,"test":[0,4.841836791]},
-{"learn":[0,4.840923292],"iteration":1,"passed_time":0.1475291425,"remaining_time":73.6170421,"test":[0,4.840923292]},
-{"learn":[0,4.840911843],"iteration":2,"passed_time":0.2151629465,"remaining_time":71.50581923,"test":[0,4.840911843]},
-{"learn":[0,4.840322074],"iteration":3,"passed_time":0.2813606796,"remaining_time":70.05880921,"test":[0,4.840322074]},
-{"learn":[0,4.840316119],"iteration":4,"passed_time":0.3519114556,"remaining_time":70.03037967,"test":[0,4.840316119]},
-{"learn":[-298.4100058,4.839556626],"iteration":5,"passed_time":0.4215143425,"remaining_time":69.83087607,"test":[-298.4100058,4.839556626]}
+{"learn":[-87609.06171,4.579044944],"iteration":0,"passed_time":0.07219208476,"remaining_time":72.11989268,"test1":[-11810.86223,6.025067935],"test":[-87609.06171,4.579044944]},
+{"learn":[-132434.3606,4.519328387],"iteration":1,"passed_time":0.1357535737,"remaining_time":67.74103328,"test1":[-15214.7943,5.978075031],"test":[-132434.3606,4.519328387]},
+{"learn":[-132434.3606,4.519328366],"iteration":2,"passed_time":0.1996250244,"remaining_time":66.34204977,"test1":[-15214.7943,5.978074995],"test":[-132434.3606,4.519328366]},
+{"learn":[-132434.3606,4.519328346],"iteration":3,"passed_time":0.2632697723,"remaining_time":65.55417329,"test1":[-15214.7943,5.978074963],"test":[-132434.3606,4.519328346]},
+{"learn":[-132434.3606,4.519341384],"iteration":4,"passed_time":0.3300741218,"remaining_time":65.68475024,"test1":[-15214.7943,5.978040865],"test":[-132434.3606,4.519341384]},
+{"learn":[-201362.9559,4.492827795],"iteration":5,"passed_time":0.3943154185,"remaining_time":65.324921,"test1":[-22718.26244,5.944741529],"test":[-201362.9559,4.492827795]}
 ]}
