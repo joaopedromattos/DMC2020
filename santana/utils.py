@@ -67,42 +67,55 @@ def cost_func(target, prediction, simulatedPrice):
 def promo_detector(orders, aggregation=True, mode=True):
     """
     This function adds a "promotion" column at "orders.csv".
-    It verifies if an item of an order is being sold cheaper than it's prices "mode"/"mean".
+    It verifies if an item of an order is being sold cheaper than it's prices "mode"/"mean". 
     Case affirmative, a '1' will be added in 'promotion' column in the line of the order.
 
     Parameters: orders -> Orders DataFrame
                 aggregation -> Flag that mantains or not the "salesPriceMode" in our returned DataFrame
                 True => Return will have the column
-                mode -> Decision method flag (Default 'True'). If "True", the function will
-                use the 'mode' of the prices to decide if an item is being sold below it's normal price.
+                mode -> Decision method flag (Default 'True'). If "True", the function will 
+                use the 'mode' of the prices to decide if an item is being sold below it's normal price. 
                 If 'False', we'll use the "mean" of the prices.
-
+                
     Returns: our orders Dataframe with 2 new columns ("salesPriceMode" and "promotion")
     """
-
+    
+    new_df = pd.DataFrame()
+      
     def agregationMode(x): return x.value_counts().index[0] if mode else 'mean'
-
-    # Getting an itemID / salesPriceMode Dataframe
-    # salesPriceMode column will store the
-    # 'mean'/'mode' of our items
-    pricesAggregated = orders.groupby('itemID').agg(
-        salesPriceMode=('salesPrice', agregationMode))
-
-    pricesAggregated['promotion'] = 0
-    ordersCopy = orders.copy()
-
-    orders_with_promotion = pd.merge(
-        ordersCopy, pricesAggregated, how='inner', left_on='itemID', right_on='itemID')
-
-    # For every item whose salesPrice is lower than the 'mean'/'mode',
-    # we'll attribute 1 to it's position in 'promotion' column
-    orders_with_promotion.loc[orders_with_promotion['salesPrice'] <
-                                               orders_with_promotion['salesPriceMode'], 'promotion'] = 1
+    
+    for i in range(13, -1, -1):
+        # Getting an itemID / salesPriceMode Dataframe
+        # salesPriceMode column will store the 
+        # 'mean'/'mode' of our items
+        current_agg = orders.loc[orders.group_backwards > i].groupby(['itemID']).agg(salesPriceMode=('salesPrice', agregationMode))
+        
+        current_agg['promotion'] = 0
+        orders_copy = orders.loc[orders.group_backwards == i + 1].copy()
+        
+        current_orders_with_promotion = pd.merge(orders_copy, current_agg, how='inner', left_on='itemID', right_on='itemID')
+        
+        # For every item whose salesPrice is lower than the 'mean'/'mode',
+        # we'll attribute 1 to it's position in 'promotion' column
+        current_orders_with_promotion.loc[current_orders_with_promotion['salesPrice'] <
+                                                       current_orders_with_promotion['salesPriceMode'], 'promotion'] = 1
+        
+        new_df = pd.concat([new_df, current_orders_with_promotion])
+    
+    
+    week_13 = orders.loc[orders.group_backwards == 13].copy()
+    week_13['salesPriceMode'] = 0
+    week_13['promotion'] = 0
+    
+    new_df = pd.concat([new_df, week_13])
+    
     if (not(aggregation)):
-        orders_with_promotion.drop(
+        new_df.drop(
             'salesPriceMode', axis=1, inplace=True)
-    return orders_with_promotion
-
+        
+    new_df.sort_values(by=['group_backwards', 'itemID'], inplace=True)
+    
+    return new_df
 
 def promotionAggregation(orders, items, promotionMode='mean', timeScale='group_backwards', salesPriceMode='mean'):
     """The 'promotion' feature is, originally, given by sale. This function aggregates it into the selected
@@ -131,3 +144,34 @@ def promotionAggregation(orders, items, promotionMode='mean', timeScale='group_b
     df.rename(columns={'order': 'orderSum', 'promotion': f'promotion_{promotionMode}',
                        'salesPrice': f'salesPrice_{salesPriceMode}'}, inplace=True)
     return pd.merge(df, items_copy, how='left', left_on=['itemID'], right_on=['itemID'])
+
+def dataset_builder(orders, items):
+    """This function receives the 'orders' DataFrame created by Bruno's 'process_time' function.
+    This function aims to quickly build our dataset with few lines and simple code, based on Pandas MultiIndex Class.
+    
+    Parameters
+    -------------
+    orders : A pandas DataFrame with all the sales in the format that Bruno's
+    'process_time' function outputs.
+    items : A pandas DataFrame read from 'items.csv'
+                    
+    Return
+    -------------
+    A new pandas DataFrame grouped by 'group_backwards', with the orders summed up and merged with the 'items' DataFrame.
+    """
+    # Aggregating our data by pairs...
+    df = orders.groupby(['group_backwards', 'itemID'], as_index=False).agg({'order':'sum'}).rename(columns={'order':'orderSum'})
+    
+    # Building our dataset through multiindexing...
+    multiIndex = pd.MultiIndex.from_product([range(13, 0, -1), items['itemID']], names=['group_backwards', 'itemID'])
+    aux = pd.DataFrame(index=multiIndex)
+    df = pd.merge(aux, df, left_on=['group_backwards', 'itemID'], right_on=['group_backwards', 'itemID'], how='left')
+    df.fillna(0, inplace = True)
+
+    # Gettin' informations about our items in our dataset...
+    df = pd.merge(df, items, left_on=['itemID'], right_on=['itemID']).sort_values('group_backwards', ascending=False)
+    
+    assert (np.sum(df.group_backwards.unique() == [range(13, 0, -1)]) == 13), ("Something is wrong with the number of weeks")
+    assert (len(df) == len(items) * 13), ("There are items missing from your dataset!")
+    
+    return df
