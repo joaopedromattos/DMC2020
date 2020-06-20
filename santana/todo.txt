@@ -1,4 +1,0 @@
-Histograma dos preços vs quantidade vendida
-Ver se ocorre um aumento nas vendas nos finais de semana
-Plotar vendas por categorias
-Plotar distribuições de brands, manufacturers e customer ratings
